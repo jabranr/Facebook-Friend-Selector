@@ -1,11 +1,13 @@
-/*!
+/**
  * Facebook Friend Selector
  * Copyright (c) 2013 Coders' Grave - http://codersgrave.com
  * Version: 1.2.1
  * Requires:
- *   jQuery v1.6.2 or above
- *   Facebook Integration - http://developers.facebook.com/docs/reference/javascript/
+ *  jQuery v1.6.2 or above
+ *  Facebook Integration - http://developers.facebook.com/docs/reference/javascript/
  */
+
+
 ;(function(window, document, $, undefined) {
   'use strict';
 
@@ -65,7 +67,7 @@
     });
 
     if ( fsOptions.facebookInvite === true ){
-      
+
       var friends = selected_friends.join();
 
       FB.ui({
@@ -131,7 +133,7 @@
                         '<div id="fs-filters">' +
                           '<a href="javascript:{}" id="fs-show-selected"><span>'+fsOptions.lang.buttonShowSelected+'</span></a>' +
                         '</div>' +
-      
+
                         '<div id="fs-dialog-buttons">' +
                           '<a href="javascript:{}" id="fs-submit-button" class="fs-button"><span>'+fsOptions.lang.buttonSubmit+'</span></a>' +
                           '<a href="javascript:{}" id="fs-cancel-button" class="fs-button"><span>'+fsOptions.lang.buttonCancel+'</span></a>' +
@@ -167,28 +169,28 @@
       }, function (response) {
         _parseFacebookFriends(response);
       });
-      
+
     } else {
-    
+
       FB.api('/me/friends', function(response){
         _parseFacebookFriends(response);
-      }); 
+      });
     }
 
   },
-  
+
   _parseFacebookFriends = function (response) {
     if ( response.error ){
       alert(fsOptions.lang.fbConnectError);
       _close();
       return false;
     }
-    
+
     var facebook_friends = [];
-    
+
     if ( fsOptions.addUserGroups && !fsOptions.facebookInvite ) {
       var facebook_friends = $.parseJSON(response[0].body).data;
-      $.merge(facebook_friends, $.parseJSON(response[1].body).data);  
+      $.merge(facebook_friends, $.parseJSON(response[1].body).data);
     } else {
       facebook_friends = response.data;
     }
@@ -218,7 +220,7 @@
       if ($.inArray(parseInt(facebook_friends[j].id, 10), fsOptions.excludeIds) >= 0) {
         continue;
       }
-      
+
       if ($.inArray(parseInt(facebook_friends[j].id, 10), fsOptions.getStoredFriends) <= -1) {
         _setFacebookFriends(j, facebook_friends, false);
       }
@@ -250,16 +252,16 @@
   },
 
   _initEvent = function() {
-  
+
     wrap.delegate('#fs-cancel-button', 'click.fs', function(){
       _close();
     });
-    
+
     wrap.delegate('#fs-submit-button', 'click.fs', function(){
       _submit();
     });
-    
-    
+
+
     $('#fs-dialog input').focus(function(){
       if ($(this).val() === $(this)[0].title){
         $(this).val('');
@@ -286,7 +288,7 @@
     wrap.delegate('#fs-user-list li', 'click.fs', function() {
       _select($(this));
     });
-    
+
     $('#fs-show-selected').click(function(){
       _showSelected($(this));
     });
@@ -323,7 +325,7 @@
     else {
 
       var limit_state = _limitText();
-      
+
       if (limit_state === false) {
         btn.find('input.fs-friends').prop('checked', false);
 
@@ -388,7 +390,7 @@
 
     var elements = $('#fs-user-list .fs-fullname[value*='+search_text+']');
 
-   
+
     container.children().hide();
     $.each(elements, function(){
       $(this).parents('li').show();
@@ -470,7 +472,7 @@
 
   _showFriendCount = function() {
     if ( selected_friend_count > 1 && fsOptions.showSelectedCount === true ){
-    
+
       var selected_count_text = fsOptions.lang.selectedCountResult.replace('{0}', (selected_friend_count-1));
 
       if ( !$('#fs-dialog').has('#fs-summary-box').length ) {
@@ -498,14 +500,14 @@
   _resetSelection = function() {
     $('#fs-user-list li').removeClass('checked');
     $('#fs-user-list input.fs-friends').prop('checked', false);
-    
+
     selected_friend_count = 1;
   },
 
   _selectAll = function() {
     if (fsOptions.showButtonSelectAll === true && fsOptions.max === null) {
       $('#fs-show-selected').before('<a href="javascript:{}" id="fs-select-all"><span>'+fsOptions.lang.buttonSelectAll+'</span></a> - ');
-      
+
       wrap.delegate('#fs-select-all', 'click.fs', function() {
         if (selected_friend_count - 1 !== $('#fs-user-list li').length) {
 
@@ -515,33 +517,33 @@
           $('#fs-user-list li').each(function() {
             _select($(this));
           });
-                
+
           $('#fs-select-all').text(fsOptions.lang.buttonDeselectAll);
 
           if (isShowSelectedActive === true) {
             isShowSelectedActive = false;
             $('#fs-show-selected').text(fsOptions.lang.buttonShowSelected);
           }
-          
+
         }
         else {
           _resetSelection();
-          
+
           _showFriendCount();
-          
+
           $('#fs-select-all').text(fsOptions.lang.buttonSelectAll);
         }
       });
-      
+
     }
   },
 
   _showSelected = function(t) {
-  
+
     var container = $('#fs-user-list ul'),
         allElements = container.find('li'),
         selectedElements = container.find('li.checked');
-    
+
     if (selectedElements.length !== 0 && selectedElements.length !== allElements.length || isShowSelectedActive === true) {
       if (isShowSelectedActive === true) {
         t.removeClass('active').text(fsOptions.lang.buttonShowSelected);

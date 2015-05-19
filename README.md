@@ -7,6 +7,9 @@ Facebook Friend Selector v1.2.2
 Features
 ---
 
+* taggable_friends option
+* debug
+
 * Ability to set a maximum number for friend selection
 * Exclude as many people as you want from the list
 * Ability to show random friends list
